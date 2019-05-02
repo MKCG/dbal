@@ -1,0 +1,14 @@
+{
+    "name": "mkcg/dbal",
+    "authors": [
+        {
+            "name": "Kévin Masseix"
+        }
+    ],
+    "description": "Multi-purpose DBAL to aggregate content from different kind of stores",
+    "autoload": {
+        "psr-4": {
+            "MKCG\\DBAL\\": "src"
+        }
+    }
+}

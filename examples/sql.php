@@ -3,13 +3,13 @@
 require __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use MKCG\DBAL\Interpreters\SQLInterpreter;
-
+use MKCG\DBAL\Interpreters\SQL;
 
 $queries = [
     '
         SELECT
             t1.*,
-            t2.f1,
+            t2.f1 as aliasF1,
             t2.f2,
             table_3.*
         FROM
@@ -74,11 +74,14 @@ $queries = [
 
 
 $interpreter = new SQLInterpreter();
+$sql = new SQL();
 
 $startedAt = microtime(true);
 
 foreach ($queries as $query) {
+    $statement = $sql->interpret($query);
     $statement = $interpreter->parse($query);
+    var_dump($statement);
 }
 
 $took = microtime(true) - $startedAt;

@@ -287,7 +287,7 @@ class SQL
                 while (isset($tokens[0])) {
                     $token = array_shift($tokens);
                     if (!in_array($token, ['(', ')', ','])) {
-                        $values[] = $token;
+                        $values[] = $this->castValue($token);
                     }
                 }
 
@@ -297,14 +297,14 @@ class SQL
                     : $condition;
 
             case '=':
-                return new TermFilter($field, $tokens[0]);
+                return new TermFilter($field, $this->castValue($tokens[0]));
 
             case '!=':
             case '<>':
-                return new Not(new TermsFilter($field, $tokens[0]));
+                return new Not(new TermsFilter($field, $this->castValue($tokens[0])));
 
             case 'like':
-                return new LikeFilter($field, $tokens[0]);
+                return new LikeFilter($field, $this->castValue($tokens[0]));
 
             case 'is null':
                 return new TermFilter($field, null);
@@ -382,5 +382,31 @@ class SQL
         }
 
         return $tokens;
+    }
+
+    private function castValue($value)
+    {
+        $first = mb_substr($value, 0, 1);
+        $last = mb_substr($value, -1);
+
+        if ($first === $last && in_array($first, ['"', '`', "'"])) {
+            return mb_substr($value, 1, -1);
+        }
+
+        if (is_numeric($value)) {
+            return strpos($value, '.') !== false
+                ? (float) $value
+                : (int) $value;
+        }
+
+        if (in_array(strtolower($value), ['true', 'false'])) {
+            return (bool) $value;
+        }
+
+        if (strtolower($value) === 'null') {
+            return null;
+        }
+
+        throw new \Exception("Unexpected value : " . $value);
     }
 }

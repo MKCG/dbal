@@ -19,7 +19,7 @@ $queries = [
         WHERE
             t0.f0 LIKE "hello"
             AND
-            t1.f0 NOT IN (7, 8, 9, 15.3, "7", true, null)
+            t1.f0 NOT IN (7, 8, 9, 15.3, "7", true, null, "Lorem ipsum dolor sit amet\\" yo")
             AND
             t1.f1  NOT  IN  ("v1", "v2", "v3")
             AND t1.f2 = 4

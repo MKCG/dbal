@@ -4,6 +4,22 @@ namespace MKCG\DBAL;
 
 class Schema
 {
+    public static $types = [
+        'id',
+        'uid',
+        'reference',
+        'string',
+        'uint',
+        'int',
+        'double',
+        'boolean',
+        'null',
+        'json',
+        'array',
+        'date',
+        'time',
+    ];
+
     private $database;
     private $collection;
     private $fields;
@@ -33,6 +49,11 @@ class Schema
     public function getDefaultValue(string $field)
     {
         return null;
+    }
+
+    public function isSearchable(string $field) : bool
+    {
+        return false;
     }
 
     public function isFilterable(string $field) : bool
